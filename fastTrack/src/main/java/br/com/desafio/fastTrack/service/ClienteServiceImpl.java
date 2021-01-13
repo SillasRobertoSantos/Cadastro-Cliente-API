@@ -5,10 +5,12 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
+
+import com.google.common.reflect.TypeToken;
 
 import br.com.desafio.fastTrack.controller.dto.ClienteDto;
 import br.com.desafio.fastTrack.exceptions.ResourceNotFoundException;
+import br.com.desafio.fastTrack.exceptions.ResourceUnprocessableEntityException;
 import br.com.desafio.fastTrack.model.ClienteEntity;
 import br.com.desafio.fastTrack.repository.ClienteRepository;
 import lombok.Data;
@@ -33,9 +35,9 @@ public class ClienteServiceImpl implements ClienteService {
 
 	@Override
 	public ClienteDto buscarNome(String nome) {
-		ClienteEntity cliente = clienteRepository.findByNome(nome);
+		Optional<ClienteEntity> cliente = clienteRepository.findByNome(nome);
 		if (cliente != null) {
-			return converterClienteToClienteDto(cliente);
+			return converterClienteToClienteDto(cliente.get());
 		}
 		throw new ResourceNotFoundException("cliente " + nome + " não encontrado!");
 	}
@@ -43,9 +45,18 @@ public class ClienteServiceImpl implements ClienteService {
 	@Override
 	public ClienteDto cadastrar(ClienteDto clienteDto) {
 
-		ClienteEntity response = converterClienteDtoToCliente(clienteDto);
+		Optional<ClienteEntity> response = clienteRepository.finByCliente(clienteDto.getNome(), clienteDto.getSexo(),
+				clienteDto.getDataNascimento(), clienteDto.getIdade(), clienteDto.getCidades());
 
-		ClienteEntity cliente = clienteRepository.save(response);
+		if (response.isPresent()) {
+
+			throw new ResourceUnprocessableEntityException("Cliente já possui cadastro");
+
+		}
+
+		ClienteEntity converterClienteDtoToCliente = converterClienteDtoToCliente(clienteDto);
+
+		ClienteEntity cliente = clienteRepository.save(converterClienteDtoToCliente);
 
 		return converterClienteToClienteDto(cliente);
 	}
@@ -84,7 +95,6 @@ public class ClienteServiceImpl implements ClienteService {
 	private ClienteDto converterClienteToClienteDto(final ClienteEntity cliente) {
 
 		return modelMapper.map(cliente, ClienteDto.class);
-
 	}
 
 }

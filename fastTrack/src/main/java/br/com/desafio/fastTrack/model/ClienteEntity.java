@@ -34,8 +34,8 @@ public class ClienteEntity {
 	private String sexo;
 	private LocalDate dataNascimento;
 	private Integer idade;
-	@ManyToOne 
-	@JoinColumn (name ="cidades_id", insertable = true)
+	@ManyToOne
+	@JoinColumn(name = "cidades_id", insertable = true)
 	private CidadesEntity cidades;
 
 }

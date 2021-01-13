@@ -1,6 +1,5 @@
 package br.com.desafio.fastTrack.controller.dto;
 
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -12,10 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CidadesDto {
-	
-	
+
 	private Long id;
-	@NotNull(message = "Nome é Obrigatório!")
+	@NotEmpty
+	@NotNull(message = "Campo Obrigatório")
 	private String nome;
 	@NotEmpty(message = "Estado não pode ser Vazio.")
 	private String estado;

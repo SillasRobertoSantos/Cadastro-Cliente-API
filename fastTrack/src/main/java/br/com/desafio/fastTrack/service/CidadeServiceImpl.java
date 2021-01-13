@@ -1,6 +1,7 @@
 package br.com.desafio.fastTrack.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import com.google.common.reflect.TypeToken;
 
 import br.com.desafio.fastTrack.controller.dto.CidadesDto;
 import br.com.desafio.fastTrack.exceptions.ResourceNotFoundException;
+import br.com.desafio.fastTrack.exceptions.ResourceUnprocessableEntityException;
 import br.com.desafio.fastTrack.model.CidadesEntity;
 import br.com.desafio.fastTrack.repository.CidadesRepository;
 
@@ -25,11 +27,21 @@ public class CidadeServiceImpl implements CidadeService {
 	@Override
 	public CidadesDto cadastrar(CidadesDto cidadesDto) {
 
-		CidadesEntity response = converterCidadeDtoToCidade(cidadesDto);
+		Optional<List<CidadesEntity>> response = cidadesRepository
+				.findCidadesEntityByNomeAndByEstado(cidadesDto.getNome(), cidadesDto.getEstado());
 
-		CidadesEntity cidadesEntity = cidadesRepository.save(response);
+		if (response.isPresent()) {
+
+			throw new ResourceUnprocessableEntityException("Cidade já possui cadastro");
+
+		}
+
+		CidadesEntity converterCidadeDtoToCidade = converterCidadeDtoToCidade(cidadesDto);
+
+		CidadesEntity cidadesEntity = cidadesRepository.save(converterCidadeDtoToCidade);
 
 		return converterCidadesToCidadeDto(cidadesEntity);
+
 	}
 
 	@Override
@@ -62,9 +74,9 @@ public class CidadeServiceImpl implements CidadeService {
 
 	}
 
-	private CidadesDto converterCidadesToCidadeDto(final CidadesEntity cidadeEntity) {
+	private CidadesDto converterCidadesToCidadeDto(final CidadesEntity cidadesEntity) {
 
-		return modelMapper.map(cidadeEntity, CidadesDto.class);
+		return modelMapper.map(cidadesEntity, CidadesDto.class);
 
 	}
 }

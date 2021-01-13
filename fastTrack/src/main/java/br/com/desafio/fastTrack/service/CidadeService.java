@@ -7,7 +7,9 @@ import br.com.desafio.fastTrack.controller.dto.CidadesDto;
 public interface CidadeService {
 
 	CidadesDto cadastrar(CidadesDto cidadesDto);
+
 	List<CidadesDto> buscarNome(String nome);
+
 	List<CidadesDto> buscarUf(String estado);
-	
+
 }

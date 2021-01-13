@@ -20,18 +20,20 @@ import lombok.NoArgsConstructor;
 public class ClienteDto {
 	private Long id;
 
-	@NotNull(message = "Campo Obrigatório")	
+	@NotEmpty(message = "Nome não pode ser vazio")
+	@NotNull(message = "Campo Obrigatório")
 	private String nome;
-	
-	@NotNull(message = "Campo Obrigatório")	
+
+	@NotEmpty(message = "Nome não pode ser vazio")
+	@NotNull(message = "Campo Obrigatório")
 	private String sexo;
-	
-	@DateTimeFormat	
+
+	@DateTimeFormat
 	private LocalDate dataNascimento;
-	
-	@NotNull(message = "Campo Obrigatório")	
+
+	@NotNull(message = "Campo Obrigatório")
 	private Integer idade;
-	
+
 	@NotNull(message = "Campo Obrigatório")
 	private CidadesEntity cidades;
 
