@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.reflect.TypeToken;
 
@@ -25,6 +26,7 @@ public class CidadeServiceImpl implements CidadeService {
 	private CidadesRepository cidadesRepository;
 
 	@Override
+	@Transactional
 	public CidadesDto cadastrar(CidadesDto cidadesDto) {
 
 		Optional<List<CidadesEntity>> response = cidadesRepository
@@ -45,6 +47,7 @@ public class CidadeServiceImpl implements CidadeService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<CidadesDto> buscarNome(String nome) {
 		List<CidadesEntity> cidade = cidadesRepository.findCidadesEntityByNome(nome);
 
@@ -59,13 +62,14 @@ public class CidadeServiceImpl implements CidadeService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<CidadesDto> buscarUf(String estado) {
 		List<CidadesEntity> ufCidade = cidadesRepository.findCidadesEntityByEstado(estado);
 		if (!ufCidade.isEmpty()) {
 			return modelMapper.map(ufCidade, new TypeToken<List<CidadesDto>>() {
 			}.getType());
 		}
-		throw new ResourceNotFoundException("estado " + estado + "não encontrada");
+		throw new ResourceNotFoundException("estado " + estado + " não encontrada");
 	}
 
 	private CidadesEntity converterCidadeDtoToCidade(final CidadesDto cidadesDto) {

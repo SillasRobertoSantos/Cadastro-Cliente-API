@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.reflect.TypeToken;
 
@@ -25,6 +26,7 @@ public class ClienteServiceImpl implements ClienteService {
 	ClienteRepository clienteRepository;
 
 	@Override
+	@Transactional(readOnly = true)
 	public ClienteDto buscarId(Long id) {
 		Optional<ClienteEntity> cliente = clienteRepository.findById(id);
 		if (cliente.isPresent()) {
@@ -34,15 +36,17 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ClienteDto buscarNome(String nome) {
 		Optional<ClienteEntity> cliente = clienteRepository.findByNome(nome);
-		if (cliente != null) {
+		if (cliente.isPresent()) {
 			return converterClienteToClienteDto(cliente.get());
 		}
 		throw new ResourceNotFoundException("cliente " + nome + " não encontrado!");
 	}
 
 	@Override
+	@Transactional
 	public ClienteDto cadastrar(ClienteDto clienteDto) {
 
 		Optional<ClienteEntity> response = clienteRepository.finByCliente(clienteDto.getNome(), clienteDto.getSexo(),
@@ -62,6 +66,7 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 
 	@Override
+	@Transactional
 	public void remover(Long id) {
 		Optional<ClienteEntity> clienteEntityOptional = clienteRepository.findById(id);
 		if (!clienteEntityOptional.isPresent()) {
@@ -72,6 +77,7 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 
 	@Override
+	@Transactional
 	public ClienteDto atualizar(ClienteDto clienteDto, Long id) {
 
 		Optional<ClienteEntity> clienteOptional = clienteRepository.findById(id);
@@ -83,7 +89,7 @@ public class ClienteServiceImpl implements ClienteService {
 
 			return converterClienteToClienteDto(clienteEntity);
 		}
-		throw new ResourceNotFoundException("impossivel atualizar, cliente não encontrado par id" + id);
+		throw new ResourceNotFoundException("impossivel atualizar, cliente não encontrado par id " + id);
 
 	}
 
