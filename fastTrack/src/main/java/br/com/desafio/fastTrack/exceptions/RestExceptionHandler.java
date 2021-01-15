@@ -32,7 +32,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(ResourceUnprocessableEntityException.class)
-	public ResponseEntity<?> handlerBadRequestException(ResourceUnprocessableEntityException reuException) {
+	public ResponseEntity<?> handlerUnprocessableEntityException(ResourceUnprocessableEntityException reuException) {
 		ResourceUnprocessableEntityDetails rueDetalis = ResourceUnprocessableEntityDetails.builder()
 
 				.withTitle("Resource Unprocessable Entity").withStatus(HttpStatus.UNPROCESSABLE_ENTITY.value())
@@ -60,7 +60,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<FormularioErrorDto> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
 			HttpServletRequest request) {
 
-		FormularioErrorDto f = new FormularioErrorDto("Erro, favor verificar padrão da solicitação");
+		FormularioErrorDto f = new FormularioErrorDto("Erro, favor verificar padrão da solicitação " 
+		+ "(Verificar se cidade é válida)" );
 
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(f);
 

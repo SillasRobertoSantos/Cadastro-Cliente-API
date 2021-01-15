@@ -1,7 +1,5 @@
 package br.com.desafio.fastTrack.service;
 
-import java.util.Optional;
-
 import br.com.desafio.fastTrack.controller.dto.ClienteDto;
 
 public interface ClienteService {
