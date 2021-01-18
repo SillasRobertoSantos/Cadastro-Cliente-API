@@ -12,11 +12,10 @@ import br.com.desafio.fastTrack.model.CidadesEntity;
 @Repository
 public interface CidadesRepository extends JpaRepository<CidadesEntity, Long> {
 
-	List<CidadesEntity> findCidadesEntityByNome(String nome);
+	List<CidadesEntity> findCidadesEntityByNomeContaining(String nome);
 
-	List<CidadesEntity> findCidadesEntityByEstado(String estado);
+	List<CidadesEntity> findCidadesEntityByEstadoContaining(String estado);
 
-	@Query("SELECT c FROM CidadesEntity c WHERE c.nome =:nome " + "AND c.estado = :estado")
-	Optional<List<CidadesEntity>> findCidadesEntityByNomeAndByEstado(String nome, String estado);
+	Optional<List<CidadesEntity>> findCidadesEntityByNomeAndEstado(String nome, String estado);
 
 }

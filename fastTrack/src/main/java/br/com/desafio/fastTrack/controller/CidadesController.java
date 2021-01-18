@@ -33,6 +33,11 @@ public class CidadesController {
 
 	}
 
+	@GetMapping
+	public ResponseEntity<List<CidadesDto>> listar() {
+		return ResponseEntity.ok(this.cidadeService.listar());
+	}
+
 	@GetMapping("/buscarNome/{nome}")
 	public ResponseEntity<List<CidadesDto>> buscarNome(@PathVariable String nome) {
 

@@ -1,6 +1,7 @@
 package br.com.desafio.fastTrack.repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +14,7 @@ import br.com.desafio.fastTrack.model.ClienteEntity;
 @Repository
 public interface ClienteRepository extends JpaRepository<ClienteEntity, Long> {
 
-	Optional<ClienteEntity> findByNome(String nome);
+	List<ClienteEntity> findByNomeContaining(String nome);
 
 	@Query("SELECT c FROM ClienteEntity c WHERE c.nome =:nome "
 			+ "AND c.sexo = :sexo AND c.dataNascimento =:dataNascimento AND c.idade =:idade "

@@ -11,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.reflect.TypeToken;
 
 import br.com.desafio.fastTrack.controller.dto.CidadesDto;
+import br.com.desafio.fastTrack.controller.dto.ClienteDto;
 import br.com.desafio.fastTrack.exceptions.ResourceNotFoundException;
 import br.com.desafio.fastTrack.exceptions.ResourceUnprocessableEntityException;
 import br.com.desafio.fastTrack.model.CidadesEntity;
+import br.com.desafio.fastTrack.model.ClienteEntity;
 import br.com.desafio.fastTrack.repository.CidadesRepository;
 
 @Service
@@ -30,7 +32,7 @@ public class CidadeServiceImpl implements CidadeService {
 	public CidadesDto cadastrar(CidadesDto cidadesDto) {
 
 		Optional<List<CidadesEntity>> response = cidadesRepository
-				.findCidadesEntityByNomeAndByEstado(cidadesDto.getNome(), cidadesDto.getEstado());
+				.findCidadesEntityByNomeAndEstado(cidadesDto.getNome(), cidadesDto.getEstado());
 
 		if (response.isPresent()) {
 
@@ -48,8 +50,22 @@ public class CidadeServiceImpl implements CidadeService {
 
 	@Override
 	@Transactional(readOnly = true)
+	public List<CidadesDto> listar() {
+		List<CidadesEntity> list = cidadesRepository.findAll();
+		if (!list.isEmpty()) {
+			return modelMapper.map(list, new TypeToken<List<CidadesDto>>() {
+			}.getType());
+		}
+
+		throw new ResourceNotFoundException(
+				"Nenhuma cidade encontrada, é necessário " + "realizar no mínimo um cadastro de cidade");
+
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public List<CidadesDto> buscarNome(String nome) {
-		List<CidadesEntity> cidade = cidadesRepository.findCidadesEntityByNome(nome);
+		List<CidadesEntity> cidade = cidadesRepository.findCidadesEntityByNomeContaining(nome);
 
 		if (!cidade.isEmpty()) {
 
@@ -64,7 +80,7 @@ public class CidadeServiceImpl implements CidadeService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<CidadesDto> buscarUf(String estado) {
-		List<CidadesEntity> ufCidade = cidadesRepository.findCidadesEntityByEstado(estado);
+		List<CidadesEntity> ufCidade = cidadesRepository.findCidadesEntityByEstadoContaining(estado);
 		if (!ufCidade.isEmpty()) {
 			return modelMapper.map(ufCidade, new TypeToken<List<CidadesDto>>() {
 			}.getType());
@@ -83,4 +99,5 @@ public class CidadeServiceImpl implements CidadeService {
 		return modelMapper.map(cidadesEntity, CidadesDto.class);
 
 	}
+
 }

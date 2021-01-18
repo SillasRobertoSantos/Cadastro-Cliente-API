@@ -1,5 +1,7 @@
 package br.com.desafio.fastTrack.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.desafio.fastTrack.controller.dto.ClienteDto;
@@ -35,6 +38,12 @@ public class ClienteController {
 
 	}
 
+	@GetMapping
+	public ResponseEntity<List<ClienteDto>> listar() {
+
+		return ResponseEntity.ok(this.clienteService.listar());
+	}
+
 	@GetMapping("/buscar-id/{id}")
 	public ResponseEntity<ClienteDto> buscarComId(@PathVariable Long id) {
 
@@ -42,7 +51,7 @@ public class ClienteController {
 	}
 
 	@GetMapping("/buscar-nome/{nome}")
-	public ResponseEntity<ClienteDto> buscarComNome(@PathVariable String nome) {
+	public ResponseEntity<List<ClienteDto>> buscarComNome(@PathVariable String nome) {
 
 		return ResponseEntity.ok(this.clienteService.buscarNome(nome));
 	}

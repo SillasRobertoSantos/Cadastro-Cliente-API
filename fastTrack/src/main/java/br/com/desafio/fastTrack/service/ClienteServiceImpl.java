@@ -1,5 +1,6 @@
 package br.com.desafio.fastTrack.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -37,10 +38,12 @@ public class ClienteServiceImpl implements ClienteService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public ClienteDto buscarNome(String nome) {
-		Optional<ClienteEntity> cliente = clienteRepository.findByNome(nome);
-		if (cliente.isPresent()) {
-			return converterClienteToClienteDto(cliente.get());
+	public List<ClienteDto> buscarNome(String nome) {
+		List<ClienteEntity> cliente = clienteRepository.findByNomeContaining(nome);
+		if (!cliente.isEmpty()) {
+			return modelMapper.map(cliente, new TypeToken<List<ClienteDto>>() {
+			}.getType());
+
 		}
 		throw new ResourceNotFoundException("cliente " + nome + " não encontrado!");
 	}
@@ -93,14 +96,27 @@ public class ClienteServiceImpl implements ClienteService {
 
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public List<ClienteDto> listar() {
+		List<ClienteEntity> list = clienteRepository.findAll();
+		if (!list.isEmpty()) {
+			return modelMapper.map(list, new TypeToken<List<ClienteDto>>() {
+			}.getType());
+		}
+
+		throw new ResourceNotFoundException(
+				"Nenhum cliente encontrado, é necessário " + "no mínimo um cadastro de cliente");
+	}
+
 	private ClienteEntity converterClienteDtoToCliente(final ClienteDto clienteDto) {
 		return modelMapper.map(clienteDto, ClienteEntity.class);
 
 	}
 
-	private ClienteDto converterClienteToClienteDto(final ClienteEntity cliente) {
+	private ClienteDto converterClienteToClienteDto(final ClienteEntity clienteEntity) {
 
-		return modelMapper.map(cliente, ClienteDto.class);
+		return modelMapper.map(clienteEntity, ClienteDto.class);
 	}
 
 }
