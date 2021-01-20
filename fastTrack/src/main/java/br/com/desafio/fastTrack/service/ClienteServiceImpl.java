@@ -81,13 +81,13 @@ public class ClienteServiceImpl implements ClienteService {
 
 	@Override
 	@Transactional
-	public ClienteDto atualizar(ClienteDto clienteDto, Long id) {
+	public ClienteDto atualizar(String nome, Long id) {
 
 		Optional<ClienteEntity> clienteOptional = clienteRepository.findById(id);
 
 		if (clienteOptional.isPresent()) {
 
-			clienteOptional.get().setNome(clienteDto.getNome());
+			clienteOptional.get().setNome(nome);
 			ClienteEntity clienteEntity = clienteRepository.save(clienteOptional.get());
 
 			return converterClienteToClienteDto(clienteEntity);

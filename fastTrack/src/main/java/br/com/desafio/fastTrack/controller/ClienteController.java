@@ -65,9 +65,9 @@ public class ClienteController {
 	}
 
 	@PatchMapping("/atualizar-nome/{id}")
-	public ResponseEntity<ClienteDto> atualizaNome(@RequestBody ClienteDto clienteDto, @PathVariable Long id) {
+	public ResponseEntity<ClienteDto> atualizaNome(@RequestParam String nome, @PathVariable Long id) {
 
-		return ResponseEntity.status(HttpStatus.OK).body(this.clienteService.atualizar(clienteDto, id));
+		return ResponseEntity.status(HttpStatus.OK).body(this.clienteService.atualizar(nome, id));
 
 	}
 }

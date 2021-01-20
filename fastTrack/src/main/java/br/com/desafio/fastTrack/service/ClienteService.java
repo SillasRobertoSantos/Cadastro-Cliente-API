@@ -14,7 +14,7 @@ public interface ClienteService {
 
 	void remover(Long id);
 
-	ClienteDto atualizar(ClienteDto clienteDto, Long id);
+	ClienteDto atualizar(String nome, Long id);
 	
 	List<ClienteDto> listar();
 }
