@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -92,14 +94,14 @@ public class ClienteServiceImpl implements ClienteService {
 
 			return converterClienteToClienteDto(clienteEntity);
 		}
-		throw new ResourceNotFoundException("impossivel atualizar, cliente não encontrado par id " + id);
+		throw new ResourceNotFoundException("impossivel atualizar, cliente não encontrado para id " + id);
 
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<ClienteDto> listar() {
-		List<ClienteEntity> list = clienteRepository.findAll();
+	public List<ClienteDto> listarClientes() {
+		List<ClienteEntity> list = clienteRepository.findAll(Sort.by(Direction.ASC, "nome"));
 		if (!list.isEmpty()) {
 			return modelMapper.map(list, new TypeToken<List<ClienteDto>>() {
 			}.getType());

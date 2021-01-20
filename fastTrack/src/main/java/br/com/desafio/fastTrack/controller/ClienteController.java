@@ -41,7 +41,7 @@ public class ClienteController {
 	@GetMapping
 	public ResponseEntity<List<ClienteDto>> listar() {
 
-		return ResponseEntity.ok(this.clienteService.listar());
+		return ResponseEntity.ok(this.clienteService.listarClientes());
 	}
 
 	@GetMapping("/buscar-id/{id}")

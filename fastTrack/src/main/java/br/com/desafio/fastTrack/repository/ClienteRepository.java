@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -21,4 +22,5 @@ public interface ClienteRepository extends JpaRepository<ClienteEntity, Long> {
 			+ "AND c.cidades =:cidades")
 	Optional<ClienteEntity> finByCliente(String nome, String sexo, LocalDate dataNascimento, Integer idade,
 			CidadesEntity cidades);
+
 }

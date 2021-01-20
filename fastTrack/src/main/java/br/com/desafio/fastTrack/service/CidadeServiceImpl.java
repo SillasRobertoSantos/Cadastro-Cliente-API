@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,8 +52,8 @@ public class CidadeServiceImpl implements CidadeService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<CidadesDto> listar() {
-		List<CidadesEntity> list = cidadesRepository.findAll();
+	public List<CidadesDto> listarCidades() {
+		List<CidadesEntity> list = cidadesRepository.findAll(Sort.by(Direction.ASC, "nome"));
 		if (!list.isEmpty()) {
 			return modelMapper.map(list, new TypeToken<List<CidadesDto>>() {
 			}.getType());

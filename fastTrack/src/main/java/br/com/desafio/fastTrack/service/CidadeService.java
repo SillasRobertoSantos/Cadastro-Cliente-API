@@ -12,5 +12,5 @@ public interface CidadeService {
 
 	List<CidadesDto> buscarUf(String estado);
 	
-	List<CidadesDto> listar();
+	List<CidadesDto> listarCidades();
 }
